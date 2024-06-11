@@ -1,0 +1,36 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <title>BD8</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+</head>
+<body>
+<div class="d-flex flex-column flex-md-row align-items-center pb-3 mb-4 border-bottom">
+    <a href="/" class="d-flex align-items-center link-body-emphasis text-decoration-none">
+        <span class="fs-4">BD8</span>
+    </a>
+
+    <nav class="d-inline-flex mt-2 mt-md-0 ms-md-auto">
+        <a class="me-3 py-2 link-body-emphasis text-decoration-none" href="/">Главная</a>
+        <a sec:authorize="hasRole('ADMIN')" class="me-3 py-2 link-body-emphasis text-decoration-none" href="/Postavkas/create">Добавить поставку</a>
+    </nav>
+</div>
+<form action="/Postavkas-find/" method="get">
+    Поиск по дате: <input type="text" name="pdate"><br>
+    <input type="submit" value="Поиск"/>
+</form>
+<div class="container mt-5">
+    <div th:each="el : ${Postavkas}" class="alert alert-info mt-2">
+        <h3 sec:authorize="hasRole('ADMIN')" th:text="'Id поставки = '+${el.id}"/>
+        <h3 th:text="'pdate = '+${el.pdate}"/>
+
+        <a sec:authorize="hasRole('ADMIN')" class="btn btn-warning" th:href="'/Postavkas/'+ ${el.id} + '/edit'">Изменить</a>
+        <form sec:authorize="hasRole('ADMIN')" th:action="'/Postavkas/'+ ${el.id} + '/delete'" method="post">
+            <button class="btn btn-warning" type="submit">Удалить</button>
+        </form>
+    </div>
+</div>
+</body>
+</html>

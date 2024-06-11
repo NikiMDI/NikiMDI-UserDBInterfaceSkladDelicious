@@ -1,0 +1,36 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <title>BD8</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+</head>
+<body>
+<div class="d-flex flex-column flex-md-row align-items-center pb-3 mb-4 border-bottom">
+    <a href="/" class="d-flex align-items-center link-body-emphasis text-decoration-none">
+        <span class="fs-4">BD8</span>
+    </a>
+    <nav class="d-inline-flex mt-2 mt-md-0 ms-md-auto">
+        <a class="me-3 py-2 link-body-emphasis text-decoration-none" href="/">Главная</a>
+        <a class="me-3 py-2 link-body-emphasis text-decoration-none" href="/Sklads-find/">Поиск складов</a>
+        <a sec:authorize="hasRole('ADMIN')" class="me-3 py-2 link-body-emphasis text-decoration-none" href="/Sklads/create">Добавить склад</a>
+    </nav>
+</div>
+<div class="container mt-5">
+    <div th:each="el : ${Sklads}" class="alert alert-info mt-2">
+        <h3 sec:authorize="hasRole('ADMIN')" th:text="'Id склада = '+${el.id}"/>
+        <h3 th:text="'Название склада = '+${el.sname}"/>
+        <div th:each="el2: ${el.tovarsinsklads}" class="container mt-5 nb-5">
+            <div th:each="el3: ${el2.tovar}" class="container mt-5 nb-5">
+                <h3 th:text="'Название товара = '+${el3.tname}"/>
+            </div>
+        </div>
+        <a sec:authorize="hasRole('ADMIN')" class="btn btn-warning" th:href="'/Sklads/'+ ${el.id} + '/edit'">Изменить</a>
+        <form sec:authorize="hasRole('ADMIN')" th:action="'/Sklads/'+ ${el.id} + '/delete'" method="post">
+            <button class="btn btn-warning" type="submit">Удалить</button>
+        </form>
+    </div>
+</div>
+</body>
+</html>
